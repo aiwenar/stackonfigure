@@ -1,0 +1,32 @@
+ver = 0.0.1
+lname = libstackonfigure.so.$ver
+
+rule cxx
+  command = g++ -c -g -fPIC -Wall -Wextra -Fall -Fextra -Iheaders -Iheaders/stackonfigure -o$out $in -std=c++0x
+
+rule  link
+  command = g++ -shared -Wl,-soname,$lname -o$lname $in
+
+bd  = ./build
+sd  = ./src
+
+build $bd/value.o:  cxx $sd/value.cc
+build $bd/config.o: cxx $sd/config.cc
+
+build lib:  link    $bd/value.o $bd/config.o
+
+incdir = /usr/include/stackonfigure
+rule n_install
+  command = if [ ! -d $incdir ] ; then mkdir $incdir ; fi ; install headers/stackonfigure/*.hh -C $incdir
+rule n_install_x32
+  command = install $lname -C /usr/lib
+rule n_install_x64
+  command = install $lname -C /usr/lib64
+rule n_install_warn
+  command = echo "Don't use install, use install_x32 or install_x64 instead."
+build install:      n_install_warn
+build _install:     n_install
+build install_x64:  n_install_x64 _install
+build install_x32:  n_install_x32 _install
+
+default lib
