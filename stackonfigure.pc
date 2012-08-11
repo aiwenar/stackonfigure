@@ -1,0 +1,8 @@
+Name: StacKonfigure
+Description: simple&small configuration library
+Requires:
+Conflicts:
+Version: 0.0.1
+Libs: -lstackonfigure
+Cflags:
+

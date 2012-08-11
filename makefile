@@ -14,9 +14,11 @@ install:
 
 install_x32: $(lname) install
 	install $(lname) -C /usr/lib
+	install stackonfigure.pc -C /usr/lib/pkgconfig/
 
 install_x64: $(lname) install
 	install $(lname) -C /usr/lib64
+	install stackinfigure.pc -C /usr/lib64/pkgconfig/
 	
 build/value.o: src/value.cc
 	$(cxx) $(cflags) -o$@ $<
