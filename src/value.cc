@@ -164,7 +164,7 @@ Value& Value::operator += ( long long val )
 
 void Value::assert ( Type t ) const
 {
-  if ( t != _type ) throw new std::runtime_error ( "Types mischmasch." );
+  if ( t != _type ) throw std::runtime_error ( "Types mischmasch." );
 }
 
 std::string scanident ( const std::string& str, unsigned int * i )
