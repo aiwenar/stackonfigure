@@ -67,7 +67,7 @@ protected:
 
   std::vector <Value*>  vals;
 
-  void    assert  ( Type t ) const;
+  void    assert  ( Type ) const;
   Value * find    ( const std::string& path ) const;
 };
 

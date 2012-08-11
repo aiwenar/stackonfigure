@@ -10,9 +10,9 @@ namespace sc
 
 Config::Config ()
 {
-  root = new Value ();
-  root->_type = Value::t_group;
-  root->_name = "root";
+  _root = new Value ();
+  _root->_type = Value::t_group;
+  _root->_name = "root";
 }
 
 void Config::read ( const char * fname )
@@ -20,8 +20,8 @@ void Config::read ( const char * fname )
   file.open ( fname, std::fstream::in );
 
   std::stack <Value*> stack;
-  Value * v = root;
-  Value * g = root;
+  Value * v = _root;
+  Value * g = _root;
 
   while ( not file.eof () and file.good () )
   {
@@ -139,14 +139,14 @@ void Config::save ( const char * fname )
 {
   file.open ( fname, std::fstream::out );
 
-  exportfn ( root );
+  exportfn ( _root );
 
   file.close ();
 }
 
 void Config::exportfn ( Value * g )
 {
-  if ( g != root )
+  if ( g != _root )
   {
     file << "( ";
     if ( g->name () != "" )
@@ -181,7 +181,7 @@ void Config::exportfn ( Value * g )
     if ( v->name () != "" )
       file << ':' << v->name () << '\n';
   }
-  if ( g != root )
+  if ( g != _root )
     file << ")\n";
 }
 
