@@ -162,9 +162,13 @@ Value& Value::operator += ( long long val )
 // misc
 //
 
+const char * types_names[] = {
+  "invalid!", "float", "number", "boolean", "string", "group", "none"
+};
+
 void Value::assert ( Type t ) const
 {
-  if ( t != _type ) throw std::runtime_error ( "Types mischmasch." );
+  if ( t != _type ) throw std::runtime_error ( std::string ( "Bad type (" ) + types_names[t] + " ~= " + types_names[_type] + ")." );
 }
 
 std::string scanident ( const std::string& str, unsigned int * i )
@@ -231,9 +235,9 @@ Value * Value::find ( const std::string& path ) const
       ++i;
       v = v->vals[num];
     }
-    else throw std::runtime_error ( std::string ( "unexcepted character " ) + path[i] + " in path." );
+    else throw std::runtime_error ( std::string ( "invalid path `" ) + path[i] + "`." );
   }
-  return v;
+  return 0;
 }
 
 }
