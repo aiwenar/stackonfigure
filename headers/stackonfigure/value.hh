@@ -65,8 +65,10 @@ public:
   Value&  operator= ( double val );
   Value&  operator= ( bool val );
   Value&  operator= ( long long val );
-  Value&  operator= ( int val ) { return this->operator = ( (long long)val ); }
   Value&  operator= ( std::string& val );
+
+  inline Value& operator= ( int val )           { return this->operator = ( (long long)val ); }
+  inline Value& operator= ( const char * val )  { std::string s ( val ); return this->operator = ( s ); }
 
   Value&  operator+=  ( long long v );
 
