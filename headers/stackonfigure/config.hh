@@ -45,12 +45,13 @@ public:
 
 private:
   Value       * _root;
-  int           current;
+  int           current, line;
   std::fstream  file;
 
   void        skipws    ();
   void        next      ();
   void        exportfn  ( Value * );
+  void        error     ( std::string err );
   std::string scanident ();
   std::string scanstr   ();
 };

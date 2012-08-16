@@ -29,6 +29,7 @@ Config::Config ()
   _root = new Value ();
   _root->_type = Value::t_group;
   _root->_name = "root";
+  line = 0;
 }
 
 void Config::read ( const char * fname )
@@ -82,7 +83,7 @@ void Config::read ( const char * fname )
         numval += current;
         if ( current == '.' )
         {
-          if ( doubleval ) throw new std::runtime_error ( "allready one decimal dot in number!" );
+          if ( doubleval ) error ( "allready one decimal dot in number!" );
           doubleval = true;
         }
         next ();
@@ -108,7 +109,7 @@ void Config::read ( const char * fname )
       v->_type = Value::t_boolean;
            if ( ident == "true" )  v->val_b = true;
       else if ( ident == "false" ) v->val_b = false;
-      else throw new std::runtime_error ( "unexcepted " + ident );
+      else error ( "unexcepted " + ident );
       g->vals.push_back ( v );
     }
   }
@@ -140,10 +141,15 @@ std::string Config::scanstr ()
 
 void Config::next ()
 {
-  if ( file.eof () ) throw new std::runtime_error ( "eof reached." );
+  if ( file.eof () ) error ( "eof reached." );
   current = file.get ();
+  if ( current == '\n' )
+    ++line;
   if ( current == '#' )
+  {
     do current = file.get () ; while ( current != '\n' );
+    ++line;
+  }
 }
 
 void Config::skipws ()
@@ -199,6 +205,16 @@ void Config::exportfn ( Value * g )
   }
   if ( g != _root )
     file << ")\n";
+}
+
+void Config::error ( std::string msg )
+{
+  std::ostringstream oss;
+  oss << "error "
+      << line
+      << ": "
+      << msg;
+  throw std::runtime_error ( oss.str () );
 }
 
 }
