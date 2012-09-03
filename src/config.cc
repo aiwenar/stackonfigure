@@ -12,6 +12,8 @@
  *
  * You should have received a copy of the GNU Lesser General Public License
  * along with StacKonfigure.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * Copyright © 2012 Krzysztof Mędrzycki
  */
 
 #include "config.hh"
@@ -74,10 +76,15 @@ void Config::read ( const char * fname )
       v->val_s = scanstr ();
       g->vals.push_back ( v );
     }
-    else if ( isdigit ( current ) )
+    else if ( isdigit ( current ) or '-' == current )
     {
       std::string numval;
       bool doubleval = false;
+      if ( '-' == current )
+      {
+        numval += '-';
+        next ();
+      }
       do
       {
         numval += current;
@@ -124,7 +131,7 @@ std::string Config::scanident ()
   {
     ret += current;
     next ();
-  } while ( isalnum ( current ) );
+  } while ( isalnum ( current ) or current == '_' );
   return ret;
 }
 
@@ -166,10 +173,17 @@ void Config::save ( const char * fname )
   file.close ();
 }
 
-void Config::exportfn ( Value * g )
+void Config::indent ( int lvl )
+{
+  for ( ; lvl > 0 ; --lvl )
+    file << "  ";
+}
+
+void Config::exportfn ( Value * g, int ind )
 {
   if ( g != _root )
   {
+    indent ( ind );
     file << "( ";
     if ( g->name () != "" )
       file << ':' << g->name ();
@@ -181,17 +195,18 @@ void Config::exportfn ( Value * g )
   {
     v = &((*g)[i]);
 
+    if ( v->_type == Value::t_group )
+    {
+      exportfn ( v, ind+1 );
+      continue;
+    }
+    indent ( ind+1 );
     if ( v->_type == Value::t_boolean )
     {
       if ( v->val_b )
         file << "true ";
       else
         file << "false ";
-    }
-    else if ( v->_type == Value::t_group )
-    {
-      exportfn ( v );
-      continue;
     }
     else if ( v->_type == Value::t_number )
       file << v->val_l << ' ';
@@ -201,10 +216,14 @@ void Config::exportfn ( Value * g )
       file << '"' << v->val_s << "\" ";
 
     if ( v->name () != "" )
-      file << ':' << v->name () << '\n';
+      file << ':' << v->name ();
+    file << '\n';
   }
   if ( g != _root )
+  {
+    indent ( ind );
     file << ")\n";
+  }
 }
 
 void Config::error ( std::string msg )
