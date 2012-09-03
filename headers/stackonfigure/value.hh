@@ -12,6 +12,8 @@
  *
  * You should have received a copy of the GNU Lesser General Public License
  * along with StacKonfigure.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * Copyright © 2012 Krzysztof Mędrzycki
  */
 
 #pragma once
@@ -51,6 +53,7 @@ public:
   operator  double      ()  const;
   operator  long long   ()  const;
   operator  std::string ()  const;
+  inline operator int () const { return operator long long (); }
 
   bool  get ( const std::string& path, double& d )      const;
   bool  get ( const std::string& path, bool& b )        const;
