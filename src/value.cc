@@ -12,6 +12,8 @@
  *
  * You should have received a copy of the GNU Lesser General Public License
  * along with StacKonfigure.  If not, see <http://www.gnu.org/licenses/>.
+ * 
+ * Copyright © 2012 Krzysztof Mędrzycki
  */
 
 #include "value.hh"
@@ -109,13 +111,13 @@ bool Value::get ( const std::string& path, std::string& s) const
 Value& Value::operator[] ( const std::string& path ) const
 {
   Value * v = find ( path );
-  if ( v == 0 ) throw new std::runtime_error ( "cannot find " + path );
+  if ( v == 0 ) throw std::runtime_error ( "cannot find " + path );
   return *v;
 }
 
 Value& Value::operator [] ( const unsigned long long l ) const
 {
-  if ( l > vals.size () ) throw new std::out_of_range ( "Value[]");
+  if ( l > vals.size () ) throw std::out_of_range ( "Value[]");
   return *vals[l];
 }
 
@@ -174,7 +176,7 @@ void Value::assert ( Type t ) const
 std::string scanident ( const std::string& str, unsigned int * i )
 {
   std::string ret;
-  while ( isalnum ( str[*i] ) )
+  while ( isalnum ( str[*i] ) or str[*i] == '_' )
   {
     ret += str[*i];
     ++*i;
@@ -237,7 +239,7 @@ Value * Value::find ( const std::string& path ) const
     }
     else throw std::runtime_error ( std::string ( "invalid path `" ) + path[i] + "`." );
   }
-  return 0;
+  return v;
 }
 
 }
