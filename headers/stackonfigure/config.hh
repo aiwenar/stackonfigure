@@ -12,6 +12,8 @@
  *
  * You should have received a copy of the GNU Lesser General Public License
  * along with StacKonfigure.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * Copyright © 2012 Krzysztof Mędrzycki
  */
 
 #pragma once
@@ -50,8 +52,9 @@ private:
 
   void        skipws    ();
   void        next      ();
-  void        exportfn  ( Value * );
+  void        exportfn  ( Value *, int=-1 );
   void        error     ( std::string err );
+  void        indent    ( int );
   std::string scanident ();
   std::string scanstr   ();
 };
