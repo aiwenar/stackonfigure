@@ -211,7 +211,12 @@ void Config::exportfn ( Value * g, int ind )
     else if ( v->_type == Value::t_number )
       file << v->val_l << ' ';
     else if ( v->_type == Value::t_float )
-      file << v->val_d << ' ';
+    {
+      long long p = (long long)v->val_d;
+      double q = v->val_d - p;
+      while ( 0 != q and q<1 ) q *= 10;
+      file << p << '.' << q << ' ';
+    }
     else if ( v->_type == Value::t_string )
       file << '"' << v->val_s << "\" ";
 
