@@ -1,5 +1,6 @@
 ver = 0.0.1
-lname = libstackonfigure.so.$ver
+name  = stackonfigure
+lname = lib$name.so.$ver
 
 rule cxx
   command = g++ -c -g -fPIC -Wall -Wextra -Fall -Fextra -Iheaders -Iheaders/stackonfigure -o$out $in -std=c++0x
@@ -19,9 +20,9 @@ incdir = /usr/include/stackonfigure
 rule n_install
   command = if [ ! -d $incdir ] ; then mkdir $incdir ; fi ; install headers/stackonfigure/*.hh -C $incdir
 rule n_install_x32
-  command = install $lname -C /usr/lib ; install stackonfigure.pc -C /usr/lib/pkgconfig/
+  command = ln -s $lname lib$name.so ; install lib$name.so* -C /usr/lib ; install stackonfigure.pc -C /usr/lib/pkgconfig/
 rule n_install_x64
-  command = install $lname -C /usr/lib64 ; install stackonfigure.pc -C /usr/lib64/pkgconfig
+  command = ln -s $lname lib$name.so ; install lib$name.so* -C /usr/lib64 ; install stackonfigure.pc -C /usr/lib64/pkgconfig
 rule n_install_warn
   command = echo "Don't use install, use install_x32 or install_x64 instead."
 build install:      n_install_warn
