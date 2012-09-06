@@ -237,7 +237,16 @@ Value * Value::find ( const std::string& path ) const
       ++i;
       v = v->vals[num];
     }
-    else throw std::runtime_error ( std::string ( "invalid path `" ) + path[i] + "`." );
+    else
+    {
+      std::ostringstream oss;
+      oss << "invalid path `"
+          << path.substr ( 0, i )
+          << '[' << path[i] << ']'
+          << path.substr ( i+1, path.size () )
+          << "`.";
+      throw std::runtime_error ( oss.str () );
+    }
   }
   return v;
 }
