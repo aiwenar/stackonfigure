@@ -1,17 +1,17 @@
-/* This file is part of StacKonfigure.
+/* This file is part of Eyes.
  *
- * StacKonfigure is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Lesser General Public License as published by
+ * Eyes is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
  *
- * StacKonfigure is distributed in the hope that it will be useful,
+ * Eyes is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU Lesser General Public License for more details.
+ * GNU General Public License for more details.
  *
- * You should have received a copy of the GNU Lesser General Public License
- * along with StacKonfigure.  If not, see <http://www.gnu.org/licenses/>.
+ * You should have received a copy of the GNU General Public License
+ * along with Eyes.  If not, see <http://www.gnu.org/licenses/>.
  *
  * Copyright © 2012 Krzysztof Mędrzycki
  */
@@ -212,9 +212,15 @@ void Config::exportfn ( Value * g, int ind )
       file << v->val_l << ' ';
     else if ( v->_type == Value::t_float )
     {
-      long long p = (long long)v->val_d;
-      double q = v->val_d - p;
-      while ( 0 != q and q<1 ) q *= 10;
+      double val = v->val_d;
+      if ( val < 0 )
+      {
+        file << '-';
+        val = -val;
+      }
+      long long p = (long long)val;
+      double q = val - p;
+      for ( double x=q ; 0 != x and x<1 ; x-=(long)x ) x = ( q *= 10 );
       file << p << '.' << q << ' ';
     }
     else if ( v->_type == Value::t_string )
