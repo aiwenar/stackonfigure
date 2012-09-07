@@ -219,9 +219,17 @@ void Config::exportfn ( Value * g, int ind )
         val = -val;
       }
       long long p = (long long)val;
-      double q = val - p;
-      for ( double x=q ; 0 != x and x<1 ; x-=(long)x ) x = ( q *= 10 );
-      file << p << '.' << (long long)q << ' ';
+      file << p << '.';
+      if ( (val-p) == 0 )
+        file << '0';
+      else
+        for ( double x= val -p ; 0 != x and x < 1 ; x -= (int)x )
+        {
+          x *= 10;
+          long long t = x;
+          file << t;
+        }
+      file << ' ';
     }
     else if ( v->_type == Value::t_string )
       file << '"' << v->val_s << "\" ";
