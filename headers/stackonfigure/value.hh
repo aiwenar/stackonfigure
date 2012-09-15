@@ -22,6 +22,8 @@
 #include <map>
 #include <string>
 
+extern "C" long long int llabs ( long long j );
+
 namespace sc
 {
 
@@ -44,7 +46,7 @@ public:
 
   inline  Type        type    ()  { return _type; }
   inline  int         length  ()  { return vals.size (); }
-  inline  std::string name    ()  { return _name; }
+  inline  std::string name    ()  { return std::string ( _name.c_str () ); }
   inline  void        name    ( const std::string& newn )  { _name = newn; }
 
   Value&  append  ( Type ); // adds new unnamed entry at end of list
@@ -54,6 +56,8 @@ public:
   operator  long long   ()  const;
   operator  std::string ()  const;
   inline operator int () const { return operator long long (); }
+  inline operator unsigned long long () const  { return llabs ( operator long long () ); }
+  inline operator unsigned int () const { return llabs ( operator long long () ); }
 
   bool  get ( const std::string& path, double& d )      const;
   bool  get ( const std::string& path, bool& b )        const;
