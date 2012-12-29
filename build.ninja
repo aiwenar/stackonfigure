@@ -16,13 +16,19 @@ build $bd/config.o: cxx $sd/config.cc
 
 build lib:  link    $bd/value.o $bd/config.o
 
+packfiles = headers src stackonfigure.pc makefile build.ninja LICENSE
+packname  = $name.$ver.tar.gz
+rule pack
+  command = tar -cf $packname --gzip $packfiles
+build $packname:  pack | lib
+
 incdir = /usr/include/stackonfigure
 rule n_install
   command = if [ ! -d $incdir ] ; then mkdir $incdir ; fi ; install headers/stackonfigure/*.hh -C $incdir
 rule n_install_lib
-  command = install $lname -C /usr/lib ; install stackonfigure.pc -C /usr/lib/pkgconfig/
+  command = install lib$name* -C /usr/lib ; install stackonfigure.pc -C /usr/lib/pkgconfig/
 rule n_install_lib64
-  command = install $lname -C /usr/lib64 ; install stackonfigure.pc -C /usr/lib64/pkgconfig
+  command = install lib$name* -C /usr/lib64 ; install stackonfigure.pc -C /usr/lib64/pkgconfig
 rule n_install_warn
   command = echo "Please use install_lib64 on x64 systems with /usr/lib64 folder, otherwise please use install_lib"
 rule n_links
@@ -34,4 +40,3 @@ build install_lib64:  n_install_lib64 links _install
 build install_lib:    n_install_lib   links _install
 
 default lib
-
