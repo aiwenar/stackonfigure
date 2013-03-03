@@ -1,12 +1,14 @@
 ver   = 0.0.1
 name  = stackonfigure
-lname = lib$name.so.$ver
 
 rule cxx
   command = g++ -c -g -fPIC -Wall -Wextra -Fall -Fextra -Iheaders -Iheaders/stackonfigure -o$out $in -std=c++0x
 
 rule  link
-  command = g++ -shared -Wl,-soname,$lname -o$lname $in
+  command = g++ -shared -o$out $in -Wl,-soname,$soname
+
+rule ln
+  command = ln -s $in $out
 
 bd  = ./build
 sd  = ./src
@@ -14,7 +16,9 @@ sd  = ./src
 build $bd/value.o:  cxx $sd/value.cc
 build $bd/config.o: cxx $sd/config.cc
 
-build lib:  link    $bd/value.o $bd/config.o
+build lib$name.$ver:  link $bd/value.o $bd/config.o
+  soname = lib$name.$ver
+build lib$name.so: ln lib$name.$ver
 
 packfiles = headers src stackonfigure.pc makefile build.ninja LICENSE
 packname  = $name.$ver.tar.gz
@@ -39,4 +43,4 @@ build links:          n_links
 build install_lib64:  n_install_lib64 links _install
 build install_lib:    n_install_lib   links _install
 
-default lib
+default lib$name.so
