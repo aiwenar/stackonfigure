@@ -16,7 +16,7 @@ sd  = ./src
 build $bd/value.o:  cxx $sd/value.cc
 build $bd/config.o: cxx $sd/config.cc
 
-build lib$name.$ver:  link $bd/value.o $bd/config.o
+build lib$name.so.$ver:  link $bd/value.o $bd/config.o
   soname = lib$name.$ver
 build lib$name.so: ln lib$name.$ver
 
