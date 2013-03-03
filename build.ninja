@@ -2,13 +2,13 @@ ver   = 0.0.1
 name  = stackonfigure
 
 rule cxx
-  command = g++ -c -g -fPIC -Wall -Wextra -Fall -Fextra -Iheaders -Iheaders/stackonfigure -o$out $in -std=c++0x
+  command = clang++ -c -g -fPIC -Wall -Wextra -Fall -Fextra -pedantic -Iheaders -Iheaders/stackonfigure -o$out $in -std=c++0x
 
 rule  link
-  command = g++ -shared -o$out $in -Wl,-soname,$soname
+  command = clang++ -shared -o$out $in -Wl,-soname,$soname -Wl,-z,now -fstack-protector
 
 rule ln
-  command = ln -s $in $out
+  command = ln -sf $in $out
 
 bd  = ./build
 sd  = ./src
@@ -17,8 +17,8 @@ build $bd/value.o:  cxx $sd/value.cc
 build $bd/config.o: cxx $sd/config.cc
 
 build lib$name.so.$ver:  link $bd/value.o $bd/config.o
-  soname = lib$name.$ver
-build lib$name.so: ln lib$name.$ver
+  soname = lib$name.so.$ver
+build lib$name.so: ln lib$name.so.$ver
 
 packfiles = stackonfigure/headers stackonfigure/src stackonfigure/stackonfigure.pc stackonfigure/makefile stackonfigure/build.ninja stackonfigure/LICENSE
 packname  = $name.$ver.tar.gz
