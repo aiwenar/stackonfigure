@@ -20,11 +20,12 @@ build lib$name.so.$ver:  link $bd/value.o $bd/config.o
   soname = lib$name.so.$ver
 build lib$name.so: ln lib$name.so.$ver
 
-packfiles = stackonfigure/headers stackonfigure/src stackonfigure/stackonfigure.pc stackonfigure/makefile stackonfigure/build.ninja stackonfigure/LICENSE
+packfiles = stackonfigure/headers stackonfigure/src stackonfigure/stackonfigure.pc stackonfigure/build.ninja stackonfigure/LICENSE
 packname  = $name.$ver.tar.gz
 rule pack
   command = tar -C .. -cf `pwd`/$packname --gzip $packfiles
 build $packname:  pack
+build pack: phony $packname
 
 incdir = /usr/include/stackonfigure
 rule n_install
