@@ -21,7 +21,7 @@ build lib$name.so.$ver:  link $bd/value.o $bd/config.o
   soname = lib$name.so.$major
 build lib$name.so: ln lib$name.so.$ver
 
-packfiles = `pwd`/headers stackonfigure/src stackonfigure/stackonfigure.pc stackonfigure/build.ninja stackonfigure/LICENSE
+packfiles = stackonfigure/headers stackonfigure/src stackonfigure/stackonfigure.pc stackonfigure/build.ninja stackonfigure/LICENSE
 packname  = $name.$ver.tar.gz
 rule pack
   command = tar -C .. -cf `pwd`/$packname --gzip $packfiles
