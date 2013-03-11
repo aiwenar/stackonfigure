@@ -32,7 +32,9 @@ public:
   Config  ();
 
   void  read  ( const char * file );
+  void  read  ( const std::string& file ) { read ( file.c_str () ); }
   void  save  ( const char * file );
+  void  save  ( const std::string& file ) { save ( file.c_str () ); }
 
   inline bool get ( const std::string& path, double& d )      const { return _root->get ( path, d ); }
   inline bool get ( const std::string& path, bool& b )        const { return _root->get ( path, b ); }
