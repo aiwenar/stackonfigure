@@ -19,13 +19,14 @@ build $bd/config.o: cxx $sd/config.cc
 
 build lib$name.so.$ver:  link $bd/value.o $bd/config.o
   soname = lib$name.so.$major
+build lib$name.so.$major: ln lib$name.so.$ver
 build lib$name.so: ln lib$name.so.$ver
 
 packfiles = stackonfigure/headers stackonfigure/src stackonfigure/stackonfigure.pc stackonfigure/build.ninja stackonfigure/LICENSE
 packname  = $name.$ver.tar.gz
 rule pack
   command = tar -C .. -cf `pwd`/$packname --gzip $packfiles
-build $packname:  pack
+build $packname:  pack | lib$name.so lib$name.so.$major
 build pack: phony $packname
 
 incdir = /usr/include/stackonfigure
@@ -40,9 +41,10 @@ rule n_install_warn
 rule n_links
   command = if [ ! -e lib$name.so ] ; then ln $lname -s lib$name.so ; fi
 build install:        n_install_warn
-build _install:       n_install
+build _install:       n_install | lib$name.so lib$name.so.$major
 build links:          n_links
 build install_lib64:  n_install_lib64 links _install
 build install_lib:    n_install_lib   links _install
 
-default lib$name.so
+build all: phony lib$name.so lib$name.so.$major
+default all
