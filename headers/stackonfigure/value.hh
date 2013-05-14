@@ -22,7 +22,7 @@
 #include <map>
 #include <string>
 
-extern "C" long long int llabs ( long long j );
+extern "C" long long int llabs (long long j) throw ();
 
 namespace sc
 {
