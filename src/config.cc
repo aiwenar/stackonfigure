@@ -34,6 +34,11 @@ Config::Config ()
   line = 0;
 }
 
+Config::~Config ()
+{
+  delete _root;
+}
+
 void Config::read ( const char * fname )
 {
   file.open ( fname, std::fstream::in );

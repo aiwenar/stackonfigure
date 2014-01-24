@@ -30,6 +30,7 @@ class Config
 {
 public:
   Config  ();
+  ~Config ();
 
   void  read  ( const char * file );
   void  read  ( const std::string& file ) { read ( file.c_str () ); }
